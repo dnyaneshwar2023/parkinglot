@@ -56,25 +56,18 @@ public abstract class ParkingLot {
         return spot.getSpotID();
     }
 
-    public void unparkVehicle(int spotNumber) {
-
+    public Receipt unparkVehicle(int spotNumber) {
         ParkingSpot spot = ParkingSpotFactory.getParkingSpot(spotNumber);
         ParkingTicket ticket = ParkingTicketFactory.getTicketFor(spotNumber);
 
         Date exitTime = new Date();
         exitTime.setHours(exitTime.getHours() + 1);
-        ticket.setExitTime(exitTime);
+
+        spot.removeVehicle();
 
         int fare = this.getBillAmount(spot.getSpotType(), ticket);
 
-        ticket.setFare(fare);
-        System.out.println("Ticket Details");
-        System.out.printf("Ticket Number: %d%n", ticket.getTicketID());
-        System.out.printf("Spot Number: %d%n", ticket.getSpotNumber());
-        System.out.printf("Entry Time: %s%n", ticket.getEntryTime().toString());
-        System.out.printf("Exit Time: %s%n", ticket.getExitTime().toString());
-        System.out.printf("Total Fare: %d%n", ticket.getFare());
-
+        return new Receipt(ticket.getTicketID(), ticket.getSpotNumber(), ticket.getEntryTime(), exitTime, fare);
     }
 
     private Optional<ParkingSpot> getAvailableSpot(Vehicle vehicle) {

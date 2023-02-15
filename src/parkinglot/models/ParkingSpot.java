@@ -28,6 +28,11 @@ public class ParkingSpot {
         this.status = ParkingStatus.PARKED;
     }
 
+    public void removeVehicle() {
+        vehicle = null;
+        status = ParkingStatus.UNPARKED;
+    }
+
     public boolean isAvailable() {
         return this.status == ParkingStatus.UNPARKED;
     }
